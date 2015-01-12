@@ -3,7 +3,9 @@
             [monger.collection :as mc]
             [monger.operators :refer :all]
             [clj-time.core :as t]
+            [monger.json]
             [monger.joda-time])
+  (use clojure.pprint) 
   (:import [com.mongodb MongoOptions ServerAddress]))
 
 
@@ -14,3 +16,5 @@
       yesterday (t/minus (t/now) (t/days 1))]
 
   (mc/find db coll {:name "helper_notified", :created_at { $gt yesterday}})))
+
+; (doseq [el (seq (all-events))] (pprint el))
