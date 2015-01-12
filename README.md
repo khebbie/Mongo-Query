@@ -7,6 +7,7 @@ We use the Be My Eyes db as an example.
 http://clojuremongodb.info/articles/querying.html#finding_documents  
 https://github.com/clj-time/clj-time  
 http://clojuremongodb.info/articles/integration.html  
+http://clojuremongodb.info/articles/getting_started.html  
 
 
 ## License
