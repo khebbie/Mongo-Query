@@ -1,6 +1,12 @@
 # mongo
 
 A Clojure library designed to query mongo and learn monger
+We use the Be My Eyes db as an example.
+
+# References
+http://clojuremongodb.info/articles/querying.html#finding_documents
+https://github.com/clj-time/clj-time
+http://clojuremongodb.info/articles/integration.html
 
 
 ## License
