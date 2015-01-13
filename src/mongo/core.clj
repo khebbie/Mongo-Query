@@ -2,19 +2,25 @@
   (:require [monger.core :as mg]
             [monger.collection :as mc]
             [monger.operators :refer :all]
+            [monger.query :refer :all]
             [clj-time.core :as t]
             [monger.json]
             [monger.joda-time])
-  (use clojure.pprint) 
   (:import [com.mongodb MongoOptions ServerAddress]))
 
 
-(defn all-events []
+(defn all-events [event_name]
   (let [conn (mg/connect)
-      db   (mg/get-db conn "bemyeyes")
-      coll "event_logs"
-      yesterday (t/minus (t/now) (t/days 1))]
+        db   (mg/get-db conn "bemyeyes")
+        coll "event_logs"
+        yesterday (t/minus (t/now) (t/days 1))]
 
-  (mc/find db coll {:name "helper_notified", :created_at { $gt yesterday}})))
+    (with-collection db "event_logs"
+                     (find {:name event_name, :created_at { $gt yesterday}})
+                     (fields [ :created_at :name ])
+                     ;; note the use of sorted maps with sort
+                     (sort (sorted-map :created_at -1))
+                     (limit 20)
+                     )))
 
 ; (doseq [el (seq (all-events))] (pprint el))
