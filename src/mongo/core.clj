@@ -24,5 +24,6 @@
                      (limit max-limit)
                      )))
 
-(defn all-helper-notified []
-  (doseq [el (seq (all-events "helper_notified" 10))] (pprint el)))
+(defn all-helper-notified
+  ([] (all-helper-notified 10))
+  ([max-limit] (doseq [el (seq (all-events "helper_notified" max-limit))] (pprint el))))
