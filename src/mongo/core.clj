@@ -1,6 +1,5 @@
 (ns mongo.core
   (:require [monger.core :as mg]
-            [monger.collection :as mc]
             [monger.operators :refer :all]
             [monger.query :refer :all]
             [clj-time.core :as t]
@@ -13,7 +12,6 @@
 (defn all-events [event_name max-limit]
   (let [conn (mg/connect)
         db   (mg/get-db conn "bemyeyes")
-        coll "event_logs"
         yesterday (t/minus (t/now) (t/days 1))]
 
     (with-collection db "event_logs"
