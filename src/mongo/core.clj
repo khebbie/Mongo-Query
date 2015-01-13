@@ -20,6 +20,7 @@
                      (mq/sort (sorted-map :created_at -1))
                      (mq/limit max-limit))))
 
-(defn all-helper-notified
-  ([] (all-helper-notified 10))
-  ([max-limit] (doseq [el (seq (all-events "helper_notified" max-limit))] (pprint el))))
+(defn print-events
+  ([] (print-events "helper_notified" 10))
+  ([event-name] (print-events event-name 10))
+  ([event-name max-limit] (doseq [el (seq (all-events event-name max-limit))] (pprint el))))
