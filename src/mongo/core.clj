@@ -8,13 +8,15 @@
             [monger.joda-time])
   (:import [com.mongodb MongoOptions ServerAddress]))
 
-(defn events-from-yesterday [event-name]
-   (let [yesterday (t/minus (t/now) (t/days 1))]
-      (fn [m] (mq/find m {:name event-name, :created_at { $gt yesterday}}))))
+ (def yesterday (t/minus (t/now) (t/days 1)))
 
-(defn all-events
-  ([event-name max-limit]
-     (all-events (events-from-yesterday event-name) max-limit "event_logs"))
+(defn events-since-yesterday [event-name]
+    (fn [m] (mq/find m {:name event-name, :created_at { $gt yesterday}})))
+
+(defn since-yesterday []
+    (fn [m] (mq/find m {:created_at { $gt yesterday}})))
+
+(defn all-records
   ([query max-limit collection-name]
    (let [conn (mg/connect)
          db   (mg/get-db conn "bemyeyes")]
@@ -28,5 +30,12 @@
   ([] (print-events "helper_notified" 10))
   ([event-name] (print-events event-name 10))
   ([event-name max-limit] (doseq
-                            [el (seq (all-events event-name max-limit))]
+                            [el (seq (all-records (events-since-yesterday event-name) max-limit "event_logs"))]
                             (pprint el))))
+
+(defn print-requests
+  ([] (print-requests 10))
+  ([max-limit] (doseq
+                 [el (seq (all-records (since-yesterday) max-limit "requests"))]
+                 (pprint el))))
+
