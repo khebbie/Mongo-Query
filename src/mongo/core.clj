@@ -4,12 +4,13 @@
             [monger.operators :refer :all]
             [monger.query :refer :all]
             [clj-time.core :as t]
+            [clojure.pprint :refer :all]
             [monger.json]
             [monger.joda-time])
   (:import [com.mongodb MongoOptions ServerAddress]))
 
 
-(defn all-events [event_name]
+(defn all-events [event_name max-limit]
   (let [conn (mg/connect)
         db   (mg/get-db conn "bemyeyes")
         coll "event_logs"
@@ -20,7 +21,8 @@
                      (fields [ :created_at :name ])
                      ;; note the use of sorted maps with sort
                      (sort (sorted-map :created_at -1))
-                     (limit 20)
+                     (limit max-limit)
                      )))
 
-; (doseq [el (seq (all-events))] (pprint el))
+(defn all-helper-notified []
+  (doseq [el (seq (all-events "helper_notified" 10))] (pprint el)))
